@@ -53,14 +53,33 @@ android {
 
 
 dependencies {
-    // MSP SDK dependencies
-    implementation ("com.particlemedia.ad:facebook-adapter:0.5.0")
-    implementation ("com.particlemedia.ad:nova-adapter:0.5.0")
-    implementation ("com.particlemedia.ad:google-adapter:0.5.0")
-    implementation ("com.particlemedia.ad:prebid-adapter:0.8.0")
+    // MSP SDK dependencies:  =================== START ===============================
+    // Adding all .aar files from the app/libs directory
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+
+    // facebook-adapter dependencies
+    implementation ("com.facebook.android:audience-network-sdk:6.16.0")
+
+    // google-adapter dependencies
+    implementation ("com.google.android.gms:play-services-ads:22.6.0")
+
+    // nova-adapter dependencies
+    implementation ("androidx.appcompat:appcompat:1.4.2")
+    implementation ("com.google.android.material:material:1.4.0")
+    implementation ("androidx.browser:browser:1.4.0")
+    implementation ("androidx.media3:media3-exoplayer:1.1.1")
+    implementation ("androidx.media3:media3-ui:1.1.1")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("com.github.bumptech.glide:glide:4.13.2")
+
+    // prebid-adapter dependencies
+    implementation ("com.google.code.gson:gson:2.8.9")
+
+    // mes-android-sdk dependencies
+    implementation ("com.google.protobuf:protobuf-javalite:3.19.0")
+    // MSP SDK dependencies: =================== END ================================
 
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.5")
     implementation("androidx.activity:activity-compose:1.9.2")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
