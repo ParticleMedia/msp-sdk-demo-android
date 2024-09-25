@@ -31,3 +31,9 @@
 -dontwarn org.openjsse.javax.net.ssl.SSLParameters
 -dontwarn org.openjsse.javax.net.ssl.SSLSocket
 -dontwarn org.openjsse.net.ssl.OpenJSSE
+
+## Google Ads
+-keep class com.google.android.gms.ads.** { *; }
+
+## MSP SDK
+-keep class com.particles.** { *; }
