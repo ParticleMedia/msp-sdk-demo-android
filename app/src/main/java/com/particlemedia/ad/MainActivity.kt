@@ -31,26 +31,32 @@ class MainActivity : ComponentActivity() {
         // 1. init MSP SDK
         val initParams = object : MSPInitializationParameters  {
             override fun getConsentString(): String {
+                // currently returned value is not used
                 return ""
             }
 
             override fun getParameters(): Map<String, Any> {
+                // currently returned value is not used
                 return mapOf()
             }
 
             override fun hasUserConsent(): Boolean {
+                // currently returned value is not used
                 return true
             }
 
             override fun isAgeRestrictedUser(): Boolean {
+                // currently returned value is not used
                 return false
             }
 
             override fun isDoNotSell(): Boolean {
+                // currently returned value is not used
                 return false
             }
 
             override fun isInTestMode(): Boolean {
+                // currently returned value is not used
                 return true
             }
 
@@ -69,7 +75,7 @@ class MainActivity : ComponentActivity() {
         }
 
         val timeTakenInit = measureTimeMillis { MSP.init(applicationContext, initParams, initListener, false) }
-        Logger.setLogLevel(Logger.DEBUG)
+        Logger.setLogLevel(Logger.DEBUG) // for debugging only. Please do NOT set for production builds.
         Logger.info("MSP.init() DURATION: $timeTakenInit ms")
 
         // 2. listen and handle loaded Ad
@@ -79,7 +85,7 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun onAdLoaded(ad: MSPAd) {
-                // This API is Deprecated
+                // This API is DEPRECATED
             }
 
             override fun onAdLoaded(placementId: String) {
@@ -131,7 +137,7 @@ class MainActivity : ComponentActivity() {
             .setCustomParams(mapOf("user_id" to "177905312"))
             .setAdaptiveBannerSize(AdSize(384, 0, false, true))
             .setIsCacheSupported(true)
-            .setTestParams(getTestParams())
+            .setTestParams(getTestParams()) // for testing ONLY. Please do NOT set for production builds. Otherwise no impression will be counted.
             .build()
 
         val start = System.currentTimeMillis()
