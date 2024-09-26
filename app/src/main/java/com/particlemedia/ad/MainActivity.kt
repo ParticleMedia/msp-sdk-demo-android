@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun getPrebidAPIKey(): String {
-                return "af7ce3f9-462d-4df1-815f-09314bb87ca3"
+                return "af7ce3f9-462d-4df1-815f-09314bb87ca3" // Please replace with your own Prebid API Key
             }
 
             override fun getPrebidHostUrl(): String {
@@ -129,7 +129,7 @@ class MainActivity : ComponentActivity() {
         }
 
         // 3. Load an Ad
-        val placementId = "demo-android-article-top"
+        val placementId = "demo-android-article-top"  // Please replace with your own placement ID
         val adRequest = AdRequest.Builder(AdFormat.BANNER)
             .setContext(applicationContext)
             .setPlacement(placementId)

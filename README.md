@@ -1,8 +1,8 @@
 # MSP SDK (Android) integration guide
 ## Privisioning
-A *Prebid API Key* needs to be provided offline by Particles. Please search `"af7ce3f9-462d-4df1-815f-09314bb87ca3"` in the demo app for usage. 
+A *Prebid API Key* needs to be provided offline by Particles. Please search `"af7ce3f9-462d-4df1-815f-09314bb87ca3"` in the demo app and replace it with your own. 
 
-Publisher App developers need to pass an *placement id* provisioned by Particles to `LoadAd` API to load an Ad. Please search `"demo-android-article-top"` in the demo app for usage.
+Publisher App developers need to pass an *placement id* provisioned by Particles to `LoadAd` API to load an Ad. Please search `"demo-android-article-top"` in the demo app and replace it with your own.
 
 ## Dependencies
 For now MSP SDK is distributed as aar files and we are working on publish it to public remote respositories like maven central. You can download all the aar files from dir [*app/libs*](https://github.com/ParticleMedia/msp-sdk-demo/tree/main/app/libs).
