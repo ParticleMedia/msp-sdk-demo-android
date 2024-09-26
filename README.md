@@ -49,3 +49,7 @@ Add below rules to your app's proguard-rules.pro file:
 -keep class com.particles.** { *; }
 ```
 
+## Verify your integration
+If everything goes well, you should be able to get below sample Ad from Prebid.
+
+<img width="300" src="https://github.com/user-attachments/assets/9135888c-f4d9-468c-b026-e989d1acbbad">
