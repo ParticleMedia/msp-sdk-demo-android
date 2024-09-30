@@ -84,6 +84,10 @@ class BannerActivity : ComponentActivity() {
                 Logger.info("Ad clicked. info: ${ad.adInfo}")
             }
 
+            override fun onAdImpression(ad: MSPAd) {
+                Logger.info("Ad is displayed. info: ${ad.adInfo}")
+            }
+
             override fun onAdLoaded(ad: MSPAd) {
                 // This API is DEPRECATED
             }
