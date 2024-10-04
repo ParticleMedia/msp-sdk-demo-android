@@ -12,6 +12,7 @@ import com.particles.msp.api.AdLoader
 import com.particles.msp.api.AdRequest
 import com.particles.msp.api.AdSize
 import com.particles.msp.api.BannerAdView
+import com.particles.msp.api.InterstitialAd
 import com.particles.msp.api.MSPAd
 import com.particles.msp.api.MSPInitListener
 import com.particles.msp.api.MSPInitStatus
@@ -23,7 +24,7 @@ import com.particles.msp.util.Logger
 import com.particles.prebidadapter.MSP
 import kotlin.system.measureTimeMillis
 
-class BannerActivity : ComponentActivity() {
+class InterstitialFormatActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ad)
@@ -120,11 +121,14 @@ class BannerActivity : ComponentActivity() {
                         .optionsViewId(R.id.options_view)
                         .build()
                     adView = NativeAdView(ad, nativeAdViewBinder, applicationContext)
+                } else if (ad is InterstitialAd) {
+                    Logger.info("Interstitial Ad loaded.")
+                    ad.show(this@InterstitialFormatActivity)
                 }
                 adView?.let {
                     adViewContainer.addView(it)
-                    destroyButton.setOnClickListener { ad.destroy() }
                 }
+                destroyButton.setOnClickListener { ad.destroy() }
             }
 
             override fun onError(msg: String) {
@@ -132,32 +136,28 @@ class BannerActivity : ComponentActivity() {
             }
         }
 
-        // 3. Load an Banner Ad
-        val placementId = "demo-android-article-top"  // Please replace with your own placement ID
-        val adRequest = AdRequest.Builder(AdFormat.BANNER)
+        // 3. Load an Interstitial Ad
+        val placementId = "demo-android-interstitial" // Please replace with your own placement ID
+        val adRequest = AdRequest.Builder(AdFormat.INTERSTITIAL)
             .setContext(applicationContext)
             .setPlacement(placementId)
-            .setAdSize(AdSize(320, 50, false, false))
             .setCustomParams(mapOf("user_id" to "177905312"))
-            .setAdaptiveBannerSize(AdSize(384, 0, false, true))
             .setIsCacheSupported(true)
-            .setTestParams(getTestParams()) // for testing ONLY. Please do NOT set for production builds. Otherwise no impression will be counted.
+            .setTestParams(getTestParams())
             .build()
-
         val start = System.currentTimeMillis()
         Logger.info("AdLoader.loadAd() start")
         AdLoader().loadAd(placementId, adLoadListener, this, adRequest)
         Logger.info("AdLoader.loadAd() end. DURATION: ${System.currentTimeMillis() - start} ms")
     }
 
-
     fun getTestParams(): Map<String, Any> {
         val testParams: MutableMap<String, Any> = HashMap()
         testParams["test_ad"] = true
         //testParams["ad_network"] = "msp_google"
-        //testParams["ad_network"] = "msp_fb"
+        testParams["ad_network"] = "msp_fb"
         //testParams["ad_network"] = "msp_nova"
-        testParams["ad_network"] = "Prebid"
+        //testParams["ad_network"] = "Prebid"
         return testParams
     }
 }

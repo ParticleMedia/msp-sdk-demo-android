@@ -132,12 +132,12 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
             }
         }
 
-        // 3. Load an Ad
+        // 3. Load an native-banner multi-format Ad
         val placementId = "demo-android-native-banner-multiformat"  // Please replace with your own placement ID
         val adRequest = AdRequest.Builder(AdFormat.MULTI_FORMAT)
             .setContext(applicationContext)
             .setPlacement(placementId)
-            .setAdSize(AdSize(320, 50, false, false))
+            .setAdSize(AdSize(300, 250, false, false))
             .setCustomParams(mapOf("user_id" to "177905312"))
             .setAdaptiveBannerSize(AdSize(384, 0, true, true))
             .setIsCacheSupported(true)
