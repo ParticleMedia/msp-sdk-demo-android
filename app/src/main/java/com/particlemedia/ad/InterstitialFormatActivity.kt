@@ -66,7 +66,7 @@ class InterstitialFormatActivity : ComponentActivity() {
             }
 
             override fun getPrebidHostUrl(): String {
-                return "https://prebid-server.themsp.ai/openrtb2/auction"
+                return "https://msp.newsbreak.com/openrtb2/auction"
             }
         }
         val initListener = object: MSPInitListener {
