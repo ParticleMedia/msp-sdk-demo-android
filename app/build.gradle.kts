@@ -54,29 +54,11 @@ android {
 
 dependencies {
     // MSP SDK dependencies:  =================== START ===============================
-    // Adding all .aar files from the app/libs directory
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
-
-    // facebook-adapter dependencies
-    implementation ("com.facebook.android:audience-network-sdk:6.16.0")
-
-    // google-adapter dependencies
-    implementation ("com.google.android.gms:play-services-ads:22.6.0")
-
-    // nova-adapter dependencies
-    implementation ("androidx.appcompat:appcompat:1.4.2")
-    implementation ("com.google.android.material:material:1.4.0")
-    implementation ("androidx.browser:browser:1.4.0")
-    implementation ("androidx.media3:media3-exoplayer:1.1.1")
-    implementation ("androidx.media3:media3-ui:1.1.1")
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation ("com.github.bumptech.glide:glide:4.13.2")
-
-    // prebid-adapter dependencies
-    implementation ("com.google.code.gson:gson:2.8.9")
-
-    // mes-android-sdk dependencies
-    implementation ("com.google.protobuf:protobuf-javalite:3.19.0")
+    implementation ("ai.themsp:facebook-adapter:0.7.0")
+    implementation ("ai.themsp:nova-adapter:0.7.0")
+    implementation ("ai.themsp:google-adapter:0.7.0")
+    implementation ("ai.themsp:prebid-adapter:0.10.0")
+    implementation ("ai.themsp:msp-core:0.3.0")
     // MSP SDK dependencies: =================== END ================================
 
     implementation("androidx.core:core-ktx:1.13.1")
@@ -87,6 +69,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.appcompat:appcompat:1.7.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
