@@ -85,6 +85,10 @@ class InterstitialFormatActivity : ComponentActivity() {
                 Logger.info("Ad clicked. info: ${ad.adInfo}")
             }
 
+            override fun onAdDismissed(ad: MSPAd) {
+                Logger.info("Ad dismissed. info: ${ad.adInfo}")
+            }
+
             override fun onAdImpression(ad: MSPAd) {
                 Logger.info("Ad is displayed. info: ${ad.adInfo}")
             }
