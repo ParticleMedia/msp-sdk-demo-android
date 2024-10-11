@@ -88,6 +88,10 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
                 Logger.info("Ad is displayed. info: ${ad.adInfo}")
             }
 
+            override fun onAdDismissed(ad: MSPAd) {
+                Logger.info("Ad dismissed. info: ${ad.adInfo}")
+            }
+
             override fun onAdLoaded(ad: MSPAd) {
                 // This API is DEPRECATED
             }
