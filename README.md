@@ -48,6 +48,8 @@ Add below rules to your app's proguard-rules.pro file:
 ## MSP SDK
 -keep class com.particles.** { *; }
 ```
+## Privacy & CCPA
+Please follow Prebid's documentation to set user's IAB US Privacy signal: https://docs.prebid.org/prebid-mobile/prebid-mobile-privacy-regulation.html#notice-and-opt-out-signal 
 
 ## Verify your integration
 If everything goes well, you should be able to get below sample Ad from Prebid.
