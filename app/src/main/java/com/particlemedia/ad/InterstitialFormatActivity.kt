@@ -14,6 +14,7 @@ import com.particles.msp.api.AdSize
 import com.particles.msp.api.BannerAdView
 import com.particles.msp.api.InterstitialAd
 import com.particles.msp.api.MSPAd
+import com.particles.msp.api.MSPConstants
 import com.particles.msp.api.MSPInitListener
 import com.particles.msp.api.MSPInitStatus
 import com.particles.msp.api.MSPInitializationParameters
@@ -29,16 +30,25 @@ class InterstitialFormatActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ad)
 
+        Logger.setLogLevel(Logger.DEBUG) // for debugging only. Please do NOT set for production builds.
         // 1. init MSP SDK
         val initParams = object : MSPInitializationParameters  {
+            override fun getAppId(): Int {
+                return 1
+            }
+
             override fun getConsentString(): String {
                 // currently returned value is not used
                 return ""
             }
 
+            override fun getOrgId(): Int {
+                return 1061
+            }
+
             override fun getParameters(): Map<String, Any> {
                 // currently returned value is not used
-                return mapOf()
+                return mapOf(MSPConstants.INIT_PARAM_KEY_PPID to "shun-test-ppid", MSPConstants.INIT_PARAM_KEY_EMAIL to "shun.j@shun.com")
             }
 
             override fun hasUserConsent(): Boolean {
@@ -76,7 +86,6 @@ class InterstitialFormatActivity : ComponentActivity() {
         }
 
         val timeTakenInit = measureTimeMillis { MSP.init(applicationContext, initParams, initListener, false) }
-        Logger.setLogLevel(Logger.DEBUG) // for debugging only. Please do NOT set for production builds.
         Logger.info("MSP.init() DURATION: $timeTakenInit ms")
 
         // 2. listen and handle loaded Ad
