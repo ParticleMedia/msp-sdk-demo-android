@@ -170,7 +170,6 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
         testParams["ad_network"] = "msp_google"
         //testParams["ad_network"] = "msp_fb"
         //testParams["ad_network"] = "msp_nova"
-        //testParams["ad_network"] = "Prebid"
         return testParams
     }
 }
