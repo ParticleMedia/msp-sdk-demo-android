@@ -58,7 +58,7 @@ dependencies {
     implementation ("ai.themsp:nova-adapter:0.11.0")
     implementation ("ai.themsp:google-adapter:0.12.0")
     implementation ("ai.themsp:prebid-adapter:0.14.0")
-    implementation ("ai.themsp:msp-core:0.7.0")
+    implementation ("ai.themsp:msp-core:0.8.0")
     // MSP SDK dependencies: =================== END ================================
 
     implementation("androidx.core:core-ktx:1.13.1")
