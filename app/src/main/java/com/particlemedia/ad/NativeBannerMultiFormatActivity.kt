@@ -167,9 +167,9 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
     fun getTestParams(): Map<String, Any> {
         val testParams: MutableMap<String, Any> = HashMap()
         testParams["test_ad"] = true
-        testParams["ad_network"] = "msp_google"
+        //testParams["ad_network"] = "msp_google"
         //testParams["ad_network"] = "msp_fb"
-        //testParams["ad_network"] = "msp_nova"
+        testParams["ad_network"] = "msp_nova"
         return testParams
     }
 }

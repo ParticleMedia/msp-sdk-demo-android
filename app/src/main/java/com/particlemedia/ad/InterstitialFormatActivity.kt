@@ -92,6 +92,8 @@ class InterstitialFormatActivity : ComponentActivity() {
         val adLoadListener = object : AdListener {
             override fun onAdClicked(ad: MSPAd) {
                 Logger.info("Ad clicked. info: ${ad.adInfo}")
+                ad.sendHideAdEvent("test ad hide reason")
+                ad.sendReportAdEvent("test ad report reason", "test ad report description")
             }
 
             override fun onAdDismissed(ad: MSPAd) {
@@ -168,8 +170,8 @@ class InterstitialFormatActivity : ComponentActivity() {
         val testParams: MutableMap<String, Any> = HashMap()
         testParams["test_ad"] = true
         //testParams["ad_network"] = "msp_google"
-        testParams["ad_network"] = "msp_fb"
-        //testParams["ad_network"] = "msp_nova"
+        //testParams["ad_network"] = "msp_fb"
+        testParams["ad_network"] = "msp_nova"
         return testParams
     }
 }
