@@ -172,6 +172,8 @@ class InterstitialFormatActivity : ComponentActivity() {
         //testParams["ad_network"] = "msp_google"
         //testParams["ad_network"] = "msp_fb"
         testParams["ad_network"] = "msp_nova"
+        testParams["is_vertical"] = true
+        testParams["creative_type"] = "video"
         return testParams
     }
 }
