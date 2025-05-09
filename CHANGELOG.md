@@ -1,3 +1,10 @@
+## 05/08/2025 (Non-SDK bidding)
+1. fix nova ad activity crash on android 8.0
+2. support ad creative property clickableComponents
+3. fix nova interstitial ad layout bottom margin
+- `ai.themsp:nova-adapter:0.11.3.0`
+- `ai.themsp:nova-sdk:1.8.0.1`
+
 ## 05/02/2025 (SDK bidding)
 1. Fix nova browser activity theme
 2. Add ad sdk versions to request params
@@ -17,6 +24,7 @@
 2. Set nova interstitial activity screen orientation portrait
 3. High engagement(aggressive) Nova interstitial Ads
 4. Lock the screen rotation for Nova interstitial Ad (to fix the issue that use can not close the App when screen is in horizontal mode)
+5. Add ad request parameter to only request nova ads
 - `ai.themsp:facebook-adapter:0.11.0.1`
 - `ai.themsp:nova-adapter:0.11.2.1`
 - `ai.themsp:google-adapter:0.12.0.1`

@@ -55,7 +55,7 @@ android {
 dependencies {
     // MSP SDK dependencies:  =================== START ===============================
     implementation ("ai.themsp:facebook-adapter:0.11.0.1")
-    implementation ("ai.themsp:nova-adapter:0.11.2.1")
+    implementation ("ai.themsp:nova-adapter:0.11.3.0")
     implementation ("ai.themsp:google-adapter:0.12.0.1")
     implementation ("ai.themsp:prebid-adapter:0.14.0.1")
     implementation ("ai.themsp:msp-core:0.9.0.1")
