@@ -1,3 +1,13 @@
+## 05/15/2025 (Non-SDK bidding)
+1. Add MSP bucket list to MES event
+2. Expose nurl and burl for Prebid Ads
+- `ai.themsp:facebook-adapter:0.11.1`
+- `ai.themsp:google-adapter:0.12.1`
+- `ai.themsp:mes-android-sdk:0.9.1`
+- `ai.themsp:msp-core:0.9.1`
+- `ai.themsp:nova-adapter:0.11.4`
+- `ai.themsp:prebid-adapter:0.14.1`
+
 ## 05/08/2025 (Non-SDK bidding)
 1. fix nova ad activity crash on android 8.0
 2. support ad creative property clickableComponents
