@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
-import com.particles.msp.AdCache
+import com.particles.android.ads.internal.data.cache.AdCache
 import com.particles.msp.api.AdFormat
 import com.particles.msp.api.AdListener
 import com.particles.msp.api.AdLoader
@@ -101,13 +101,9 @@ class BannerActivity : ComponentActivity() {
                 Logger.info("Ad is displayed. info: ${ad.adInfo}")
             }
 
-            override fun onAdLoaded(ad: MSPAd) {
-                // This API is DEPRECATED
-            }
-
             override fun onAdLoaded(placementId: String) {
                 Logger.info("Ad load event received. placementId: $placementId. Fetching ads from cache...")
-                val ad:MSPAd? = AdCache.getAd(placementId)
+                val ad:MSPAd? = AdLoader().getAd(placementId)
                 if (ad == null) {
                     Logger.info("Got null ad from cache. placementId: $placementId")
                     return
@@ -153,13 +149,12 @@ class BannerActivity : ComponentActivity() {
             .setAdSize(AdSize(320, 50, false, false))
             .setCustomParams(mapOf("user_id" to "177905312"))
             .setAdaptiveBannerSize(AdSize(384, 0, false, true))
-            .setIsCacheSupported(true)
             .setTestParams(getTestParams()) // for testing ONLY. Please do NOT set for production builds. Otherwise no impression will be counted.
             .build()
 
         val start = System.currentTimeMillis()
         Logger.info("AdLoader.loadAd() start")
-        AdLoader().loadAd(placementId, adLoadListener, this, adRequest)
+        AdLoader().loadAd(placementId, adLoadListener, adRequest)
         Logger.info("AdLoader.loadAd() end. DURATION: ${System.currentTimeMillis() - start} ms")
     }
 
