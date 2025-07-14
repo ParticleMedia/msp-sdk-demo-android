@@ -35,10 +35,26 @@ Since SDK libraries are distribured as aar files, you also need to explictly spe
 1. Init SDK using `MSP.init`
 2. Load an Ad using `AdLoader`
 3. Got notified via `AdListener.onAdLoaded(placementId: String)` when Ad finished loading.
-4. Fetch the loaded Ad from cache using `AdLoader().getAd` API
-   
+4. Fetch the loaded Ad from cache using `AdLoader().getAd` API   
 Please checkout the demo app for [sample code](https://github.com/ParticleMedia/msp-sdk-demo/blob/main/app/src/main/java/com/particlemedia/ad/MainActivity.kt)
 
+### About AdRequest.Builder.setAdaptiveBannerSize
+This is to support Google Adaptive [Banner Ads](https://developers.google.com/ad-manager/mobile-ads-sdk/android/banner)
+
+To support **inline** adaptive banner Ad: 
+```
+     setAdaptiveBannerSize(AdSize(DisplayUtils.getScreenWidth(), 0, true, false))
+```
+
+To support **anchored** adaptive banner Ad:
+```
+    com.google.android.gms.ads.AdSize size = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, DisplayUtils.getScreenWidth());
+    ......
+    setAdaptiveBannerSize(new com.particles.msp.api.AdSize(size.getWidth(), size.getHeight(), false, true))
+    
+```
+
+Please checkout the demo app for [sample code](https://github.com/ParticleMedia/msp-sdk-demo/blob/main/app/src/main/java/com/particlemedia/ad/MainActivity.kt)
 ## Proguard rules
 Add below rules to your app's proguard-rules.pro file: 
 ```
