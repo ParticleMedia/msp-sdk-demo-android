@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
-import com.particles.msp.AdCache
 import com.particles.msp.api.AdFormat
 import com.particles.msp.api.AdListener
 import com.particles.msp.api.AdLoader
@@ -13,6 +12,7 @@ import com.particles.msp.api.AdRequest
 import com.particles.msp.api.AdSize
 import com.particles.msp.api.BannerAdView
 import com.particles.msp.api.MSPAd
+import com.particles.msp.api.MSPConstants
 import com.particles.msp.api.MSPInitListener
 import com.particles.msp.api.MSPInitStatus
 import com.particles.msp.api.MSPInitializationParameters
@@ -28,16 +28,25 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ad)
 
+        Logger.setLogLevel(Logger.DEBUG) // for debugging only. Please do NOT set for production builds.
         // 1. init MSP SDK
         val initParams = object : MSPInitializationParameters  {
+            override fun getAppId(): Int {
+                return 1
+            }
+
             override fun getConsentString(): String {
                 // currently returned value is not used
                 return ""
             }
 
+            override fun getOrgId(): Int {
+                return 1061
+            }
+
             override fun getParameters(): Map<String, Any> {
                 // currently returned value is not used
-                return mapOf()
+                return mapOf(MSPConstants.INIT_PARAM_KEY_PPID to "shun-test-ppid", MSPConstants.INIT_PARAM_KEY_EMAIL to "shun.j@shun.com")
             }
 
             override fun hasUserConsent(): Boolean {
@@ -75,7 +84,6 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
         }
 
         val timeTakenInit = measureTimeMillis { MSP.init(applicationContext, initParams, initListener, false) }
-        Logger.setLogLevel(Logger.DEBUG) // for debugging only. Please do NOT set for production builds.
         Logger.info("MSP.init() DURATION: $timeTakenInit ms")
 
         // 2. listen and handle loaded Ad
@@ -92,13 +100,9 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
                 Logger.info("Ad dismissed. info: ${ad.adInfo}")
             }
 
-            override fun onAdLoaded(ad: MSPAd) {
-                // This API is DEPRECATED
-            }
-
             override fun onAdLoaded(placementId: String) {
                 Logger.info("Ad load event received. placementId: $placementId. Fetching ads from cache...")
-                val ad:MSPAd? = AdCache.getAd(placementId)
+                val ad:MSPAd? = AdLoader().getAd(placementId)
                 if (ad == null) {
                     Logger.info("Got null ad from cache. placementId: $placementId")
                     return
@@ -144,13 +148,12 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
             .setAdSize(AdSize(300, 250, false, false))
             .setCustomParams(mapOf("user_id" to "177905312"))
             .setAdaptiveBannerSize(AdSize(384, 0, true, true))
-            .setIsCacheSupported(true)
             .setTestParams(getTestParams()) // for testing ONLY. Please do NOT set for production builds. Otherwise no impression will be counted.
             .build()
 
         val start = System.currentTimeMillis()
         Logger.info("AdLoader.loadAd() start")
-        AdLoader().loadAd(placementId, adLoadListener, this, adRequest)
+        AdLoader().loadAd(placementId, adLoadListener, adRequest)
         Logger.info("AdLoader.loadAd() end. DURATION: ${System.currentTimeMillis() - start} ms")
     }
 
@@ -161,7 +164,6 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
         //testParams["ad_network"] = "msp_google"
         //testParams["ad_network"] = "msp_fb"
         testParams["ad_network"] = "msp_nova"
-        //testParams["ad_network"] = "Prebid"
         return testParams
     }
 }

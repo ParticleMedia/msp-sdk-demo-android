@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
-import com.particles.msp.AdCache
 import com.particles.msp.api.AdFormat
 import com.particles.msp.api.AdListener
 import com.particles.msp.api.AdLoader
@@ -14,6 +13,7 @@ import com.particles.msp.api.AdSize
 import com.particles.msp.api.BannerAdView
 import com.particles.msp.api.InterstitialAd
 import com.particles.msp.api.MSPAd
+import com.particles.msp.api.MSPConstants
 import com.particles.msp.api.MSPInitListener
 import com.particles.msp.api.MSPInitStatus
 import com.particles.msp.api.MSPInitializationParameters
@@ -29,16 +29,25 @@ class InterstitialFormatActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ad)
 
+        Logger.setLogLevel(Logger.DEBUG) // for debugging only. Please do NOT set for production builds.
         // 1. init MSP SDK
         val initParams = object : MSPInitializationParameters  {
+            override fun getAppId(): Int {
+                return 1
+            }
+
             override fun getConsentString(): String {
                 // currently returned value is not used
                 return ""
             }
 
+            override fun getOrgId(): Int {
+                return 1061
+            }
+
             override fun getParameters(): Map<String, Any> {
                 // currently returned value is not used
-                return mapOf()
+                return mapOf(MSPConstants.INIT_PARAM_KEY_PPID to "shun-test-ppid", MSPConstants.INIT_PARAM_KEY_EMAIL to "shun.j@shun.com")
             }
 
             override fun hasUserConsent(): Boolean {
@@ -76,13 +85,14 @@ class InterstitialFormatActivity : ComponentActivity() {
         }
 
         val timeTakenInit = measureTimeMillis { MSP.init(applicationContext, initParams, initListener, false) }
-        Logger.setLogLevel(Logger.DEBUG) // for debugging only. Please do NOT set for production builds.
         Logger.info("MSP.init() DURATION: $timeTakenInit ms")
 
         // 2. listen and handle loaded Ad
         val adLoadListener = object : AdListener {
             override fun onAdClicked(ad: MSPAd) {
                 Logger.info("Ad clicked. info: ${ad.adInfo}")
+                ad.sendHideAdEvent("test ad hide reason")
+                ad.sendReportAdEvent("test ad report reason", "test ad report description")
             }
 
             override fun onAdDismissed(ad: MSPAd) {
@@ -93,13 +103,9 @@ class InterstitialFormatActivity : ComponentActivity() {
                 Logger.info("Ad is displayed. info: ${ad.adInfo}")
             }
 
-            override fun onAdLoaded(ad: MSPAd) {
-                // This API is DEPRECATED
-            }
-
             override fun onAdLoaded(placementId: String) {
                 Logger.info("Ad load event received. placementId: $placementId. Fetching ads from cache...")
-                val ad:MSPAd? = AdCache.getAd(placementId)
+                val ad:MSPAd? = AdLoader().getAd(placementId)
                 if (ad == null) {
                     Logger.info("Got null ad from cache. placementId: $placementId")
                     return
@@ -143,15 +149,14 @@ class InterstitialFormatActivity : ComponentActivity() {
         // 3. Load an Interstitial Ad
         val placementId = "demo-android-interstitial" // Please replace with your own placement ID
         val adRequest = AdRequest.Builder(AdFormat.INTERSTITIAL)
-            .setContext(applicationContext)
+            .setContext(this)
             .setPlacement(placementId)
             .setCustomParams(mapOf("user_id" to "177905312"))
-            .setIsCacheSupported(true)
             .setTestParams(getTestParams())
             .build()
         val start = System.currentTimeMillis()
         Logger.info("AdLoader.loadAd() start")
-        AdLoader().loadAd(placementId, adLoadListener, this, adRequest)
+        AdLoader().loadAd(placementId, adLoadListener, adRequest)
         Logger.info("AdLoader.loadAd() end. DURATION: ${System.currentTimeMillis() - start} ms")
     }
 
@@ -159,9 +164,10 @@ class InterstitialFormatActivity : ComponentActivity() {
         val testParams: MutableMap<String, Any> = HashMap()
         testParams["test_ad"] = true
         //testParams["ad_network"] = "msp_google"
-        testParams["ad_network"] = "msp_fb"
-        //testParams["ad_network"] = "msp_nova"
-        //testParams["ad_network"] = "Prebid"
+        //testParams["ad_network"] = "msp_fb"
+        testParams["ad_network"] = "msp_nova"
+        testParams["is_vertical"] = true
+        testParams["creative_type"] = "video"
         return testParams
     }
 }
