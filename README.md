@@ -28,7 +28,7 @@ Since SDK libraries are distribured as aar files, you also need to explictly spe
     implementation ("com.google.code.gson:gson:2.8.9")
 
     // mes-android-sdk dependencies
-    implementation ("com.google.protobuf:protobuf-javalite:3.19.0")
+    implementation ("com.google.protobuf:protobuf-javalite:3.14.0")
 ```
 
 ## API usage 
