@@ -2,34 +2,17 @@
 ## Privisioning
 A *Prebid API Key* needs to be provided offline by Particles. Please search `"af7ce3f9-462d-4df1-815f-09314bb87ca3"` in the demo app and replace it with your own. 
 
-Publisher App developers need to pass an *placement id* provisioned by Particles to `LoadAd` API to load an Ad. Please search `"demo-android-article-top"` in the demo app and replace it with your own.
+Publisher App developers need to pass an *placement id* provisioned by Particles to `LoadAd` API to load an Ad. Please search `"demo-android-native-banner-multiformat"` in the demo app and replace it with your own.
 
 ## Dependencies
-For now MSP SDK is distributed as aar files and we are working on publish it to public remote respositories like maven central. You can download all the aar files from dir [*app/libs*](https://github.com/ParticleMedia/msp-sdk-demo/tree/main/app/libs).
-
-Since SDK libraries are distribured as aar files, you also need to explictly specify their transient dependencies as below in your app gradle file: 
 ```
-    // facebook-adapter dependencies
-    implementation ("com.facebook.android:audience-network-sdk:6.16.0")
-
-    // google-adapter dependencies
-    implementation ("com.google.android.gms:play-services-ads:22.6.0")
-
-    // nova-adapter dependencies
-    implementation ("androidx.appcompat:appcompat:1.4.2")
-    implementation ("com.google.android.material:material:1.4.0")
-    implementation ("androidx.browser:browser:1.4.0")
-    implementation ("androidx.media3:media3-exoplayer:1.1.1")
-    implementation ("androidx.media3:media3-ui:1.1.1")
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation ("com.github.bumptech.glide:glide:4.13.2")
-
-    // prebid-adapter dependencies
-    implementation ("com.google.code.gson:gson:2.8.9")
-
-    // mes-android-sdk dependencies
-    implementation ("com.google.protobuf:protobuf-javalite:3.14.0")
+    implementation ("ai.themsp:facebook-adapter:{msp_sdk_version}")
+    implementation ("ai.themsp:nova-adapter:{msp_sdk_version}")
+    implementation ("ai.themsp:google-adapter:{msp_sdk_version}")
+    implementation ("ai.themsp:prebid-adapter:{msp_sdk_version}")
+    implementation ("ai.themsp:msp-core:{msp_sdk_version}")
 ```
+Please refer to demo app gradle file for the latest msp sdk version: [build.gradle.kts](https://github.com/ParticleMedia/msp-sdk-demo-android/blob/main/app/build.gradle.kts#L57)
 
 ## API usage 
 1. Init SDK using `MSP.init`
