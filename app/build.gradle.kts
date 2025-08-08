@@ -54,11 +54,11 @@ android {
 
 dependencies {
     // MSP SDK dependencies:  =================== START ===============================
-    implementation ("ai.themsp:facebook-adapter:2.3.2")
-    implementation ("ai.themsp:nova-adapter:2.3.2")
-    implementation ("ai.themsp:google-adapter:2.3.2")
-    implementation ("ai.themsp:prebid-adapter:2.3.2")
-    implementation ("ai.themsp:msp-core:2.3.2")
+    implementation ("ai.themsp:facebook-adapter:2.4.0")
+    implementation ("ai.themsp:nova-adapter:2.4.0")
+    implementation ("ai.themsp:google-adapter:2.4.0")
+    implementation ("ai.themsp:prebid-adapter:2.4.0")
+    implementation ("ai.themsp:msp-core:2.4.0")
     // MSP SDK dependencies: =================== END ================================
 
     implementation("androidx.core:core-ktx:1.13.1")
