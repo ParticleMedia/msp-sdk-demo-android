@@ -50,15 +50,15 @@ android {
     }
 }
 
-
+val mspSdkVersion = "2.5.0"
 
 dependencies {
     // MSP SDK dependencies:  =================== START ===============================
-    implementation ("ai.themsp:facebook-adapter:2.4.0")
-    implementation ("ai.themsp:nova-adapter:2.4.0")
-    implementation ("ai.themsp:google-adapter:2.4.0")
-    implementation ("ai.themsp:prebid-adapter:2.4.0")
-    implementation ("ai.themsp:msp-core:2.4.0")
+    implementation ("ai.themsp:facebook-adapter:$mspSdkVersion")
+    implementation ("ai.themsp:nova-adapter:$mspSdkVersion")
+    implementation ("ai.themsp:google-adapter:$mspSdkVersion")
+    implementation ("ai.themsp:prebid-adapter:$mspSdkVersion")
+    implementation ("ai.themsp:msp-core:$mspSdkVersion")
     // MSP SDK dependencies: =================== END ================================
 
     implementation("androidx.core:core-ktx:1.13.1")
