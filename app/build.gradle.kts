@@ -50,7 +50,7 @@ android {
     }
 }
 
-val mspSdkVersion = "2.7.1"
+val mspSdkVersion = "2.8.0"
 
 dependencies {
     // MSP SDK dependencies:  =================== START ===============================
