@@ -33,6 +33,7 @@ class BannerActivity : ComponentActivity() {
         // 1. init MSP SDK
         val initParams = object : MSPInitializationParameters  {
             override fun getAppId(): Int {
+                // Please replace with your own provisioned app id
                 return 1
             }
 
@@ -42,11 +43,12 @@ class BannerActivity : ComponentActivity() {
             }
 
             override fun getOrgId(): Int {
+                // Please replace with your own provisioned org id
                 return 1061
             }
 
             override fun getParameters(): Map<String, Any> {
-                // currently returned value is not used
+                // Please replace with current app user id (ppid)
                 return mapOf(MSPConstants.INIT_PARAM_KEY_PPID to "shun-test-ppid", MSPConstants.INIT_PARAM_KEY_EMAIL to "shun.j@shun.com")
             }
 
@@ -147,7 +149,7 @@ class BannerActivity : ComponentActivity() {
             .setContext(applicationContext)
             .setPlacement(placementId)
             .setAdSize(AdSize(320, 50, false, false))
-            .setCustomParams(mapOf("user_id" to "177905312"))
+            .setCustomParams(mapOf("user_id" to "177905312")) // Please replace with current app user id (ppid) (optional)
             .setAdaptiveBannerSize(AdSize(384, 0, false, true))
             .setTestParams(getTestParams()) // for testing ONLY. Please do NOT set for production builds. Otherwise no impression will be counted.
             .build()
