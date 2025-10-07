@@ -33,6 +33,7 @@ class InterstitialFormatActivity : ComponentActivity() {
         // 1. init MSP SDK
         val initParams = object : MSPInitializationParameters  {
             override fun getAppId(): Int {
+                // Please replace with current app id provisioned
                 return 1
             }
 
@@ -42,11 +43,12 @@ class InterstitialFormatActivity : ComponentActivity() {
             }
 
             override fun getOrgId(): Int {
+                // Please replace with current org id provisioned
                 return 1061
             }
 
             override fun getParameters(): Map<String, Any> {
-                // currently returned value is not used
+                // Please replace with current app user id (ppid)
                 return mapOf(MSPConstants.INIT_PARAM_KEY_PPID to "shun-test-ppid", MSPConstants.INIT_PARAM_KEY_EMAIL to "shun.j@shun.com")
             }
 
@@ -151,7 +153,7 @@ class InterstitialFormatActivity : ComponentActivity() {
         val adRequest = AdRequest.Builder(AdFormat.INTERSTITIAL)
             .setContext(this)
             .setPlacement(placementId)
-            .setCustomParams(mapOf("user_id" to "177905312"))
+            .setCustomParams(mapOf("user_id" to "177905312")) // Please replace with current app user id (ppid)
             .setTestParams(getTestParams())
             .build()
         val start = System.currentTimeMillis()

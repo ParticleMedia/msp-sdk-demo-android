@@ -32,6 +32,7 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
         // 1. init MSP SDK
         val initParams = object : MSPInitializationParameters  {
             override fun getAppId(): Int {
+                // Please replace with current app id provisioned
                 return 1
             }
 
@@ -41,11 +42,12 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
             }
 
             override fun getOrgId(): Int {
+                // Please replace with current org id provisioned
                 return 1061
             }
 
             override fun getParameters(): Map<String, Any> {
-                // currently returned value is not used
+                // Please replace with current app user id (ppid)
                 return mapOf(MSPConstants.INIT_PARAM_KEY_PPID to "shun-test-ppid", MSPConstants.INIT_PARAM_KEY_EMAIL to "shun.j@shun.com")
             }
 
@@ -146,7 +148,7 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
             .setContext(applicationContext)
             .setPlacement(placementId)
             .setAdSize(AdSize(300, 250, false, false))
-            .setCustomParams(mapOf("user_id" to "177905312"))
+            .setCustomParams(mapOf("user_id" to "177905312")) // Please replace with current app user id (ppid))
             .setAdaptiveBannerSize(AdSize(384, 0, true, true))
             .setTestParams(getTestParams()) // for testing ONLY. Please do NOT set for production builds. Otherwise no impression will be counted.
             .build()
