@@ -86,6 +86,7 @@ class NativeBannerMultiFormatActivity : ComponentActivity() {
         }
 
         val timeTakenInit = measureTimeMillis { MSP.init(applicationContext, initParams, initListener, false) }
+        MSP.setPpid("test_updated_PPId")
         Logger.info("MSP.init() DURATION: $timeTakenInit ms")
 
         // 2. listen and handle loaded Ad
