@@ -69,6 +69,77 @@ Network-specific manifest entries (Google App ID, etc.) are covered per-network 
 
 ---
 
+## ProGuard / R8 Configuration
+
+If your release build enables code shrinking (`minifyEnabled true` / `isMinifyEnabled = true`), add the rules below to your app's `proguard-rules.pro`.
+
+The SDK creates ad network adapters by class name, parses ad configuration with Gson and kotlinx.serialization, and serializes events with protobuf-lite. R8 cannot see these uses, so without the rules it removes or renames the classes involved. Nothing crashes: an adapter silently never bids, ad configuration fails to parse, or events stop being reported.
+
+The rules keep only the classes and members that are reached this way. The rest of the SDK can still be shrunk and obfuscated, unlike with a blanket `-keep class com.particles.** { *; }`.
+
+```proguard
+## ---------------Begin: MSP SDK (narrowed from -keep class com.particles.** { *; }) ----------
+# Every rule below covers a place where MSP reaches its own classes by reflection or by name,
+# which R8 cannot see. Verified identical across MSP 3.7.0 – 4.15.2.
+
+# 1. Adapters are created by AdNetworkAdapterProviderImp via Class.forName(name).newInstance().
+#    Without this, the adapter is stripped/renamed, createInstance() returns null and that
+#    network silently never bids.
+-keep class * extends com.particles.msp.adapter.AdNetworkAdapter {
+    <init>();
+}
+
+# 2. PrebidBidder is created by BidderProviderImp via Class.forName + kotlin-reflect
+#    KClass.constructors, which reads the class's Kotlin @Metadata (kotlin.Metadata itself is
+#    kept by kotlin-reflect's bundled rules, which prebid-adapter brings in).
+-keep class com.particles.prebidadapter.PrebidBidder { *; }
+
+# 3. Ad config and user id are fetched with Retrofit + Gson. The request/response models are
+#    plain data classes without @SerializedName, so Gson maps JSON keys to field names:
+#    renaming a field breaks ad config parsing and no ads load.
+-keep interface com.particles.msp.auction.AdConfigApi { *; }
+-keep interface com.particles.msp.util.UserIdApi { *; }
+-keep class com.particles.msp.auction.AdConfigRequest { *; }
+-keep class com.particles.msp.auction.AdConfigResponse { *; }
+-keep class com.particles.msp.auction.AdConfigSettings { *; }
+-keep class com.particles.msp.auction.LogConfig { *; }
+-keep class com.particles.msp.auction.EventSamplingRate { *; }
+-keep class com.particles.msp.util.UserIdRequest { *; }
+-keep class com.particles.msp.util.UserIdResponse { *; }
+
+# 4. Ad config JSON (AdConfig / Placement / BidderInfo) is decoded with kotlinx.serialization.
+#    The generated serializers use string keys; keep them and their entry points.
+-keep @kotlinx.serialization.Serializable class com.particles.** { *; }
+-keep class com.particles.**$$serializer { *; }
+-keepclassmembers class com.particles.** {
+    *** Companion;
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+# 5. MES events are protobuf-lite messages; protobuf-lite reads message fields by name.
+-keep class com.particles.mes.protos.** { *; }
+
+# 6. WebView JS bridges (nova-sdk HTML / MRAID / form ads).
+-keepclassmembers class com.particles.** {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+# 7. Serializable objects passed through Intent extras (e.g. nova FormParams) — keep the
+#    serialized shape stable so a restored Activity can still deserialize them.
+-keepclassmembers class com.particles.** implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    !static !transient <fields>;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+## ---------------End: MSP SDK ----------
+```
+
+---
+
 ## Initialize the SDK
 
 Initialize the MSP SDK as early as possible — ideally in your `Application.onCreate()`. The SDK uses the initialization window to prefetch ad configurations and warm up adapter networks.
@@ -613,6 +684,10 @@ override fun onDestroy() {
 - Verify the placement IDs match what is provisioned by Particle Inc.
 - Confirm `MSP.init()` completes before `loadAd` is called.
 - Enable verbose logging during development: `Logger.setLogLevel(Logger.VERBOSE)`.
+
+**Ads fill in debug builds but an ad network never bids in release builds**
+
+The release build is shrunk by R8 without the SDK's rules, so the adapter class was removed. Add the rules in [ProGuard / R8 Configuration](#proguard--r8-configuration).
 
 **`onAdLoaded` fires but `getAd` returns null**
 
