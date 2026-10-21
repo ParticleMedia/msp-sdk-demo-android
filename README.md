@@ -232,6 +232,25 @@ The pattern for every ad format is the same:
 3. In `onAdLoaded`, call `loader.getAd(placementId)` to retrieve the ad object.
 4. Present the ad (for interstitial/rewarded) or attach the ad view to your layout.
 
+### Set a Bid Floor (optional)
+
+To set a minimum price for a request, add the `bid_floor` custom parameter: the eCPM floor in USD, **as a String** (`"1.25"` means $1.25 per 1,000 impressions). It applies to that request only and replaces the placement's configured floor. Leave the key out to use the configured floor.
+
+```kotlin
+import java.util.Locale
+
+val request = AdRequest.Builder(AdFormat.NATIVE)
+    .setContext(this)
+    .setPlacement("YOUR_PLACEMENT_ID")
+    .addCustomParam("bid_floor", String.format(Locale.US, "%.2f", 1.25)) // "1.25"
+    .build()
+loader.loadAd("YOUR_PLACEMENT_ID", adListener, request)
+```
+
+- Format the value with `Locale.US` so it is always written with a `.` decimal separator.
+- `setCustomParams(map)` replaces every custom param set before it. Put `bid_floor` in that map, or call `addCustomParam` after `setCustomParams`.
+- The floor applies to server-side (MSP) bidding. Client-side-only placements do not use it.
+
 ---
 
 ## Call NotifyLoss API
