@@ -37,12 +37,19 @@
 
 ## ---------------Begin: MSP SDK (narrowed from -keep class com.particles.** { *; }) ----------
 # Every rule below covers a place where MSP reaches its own classes by reflection or by name,
-# which R8 cannot see. Verified identical across MSP 3.7.0 – 4.15.2.
+# which R8 cannot see. Verified identical across MSP 3.4.1 – 4.15.2.
 
 # 1. Adapters are created by AdNetworkAdapterProviderImp via Class.forName(name).newInstance().
 #    Without this, the adapter is stripped/renamed, createInstance() returns null and that
 #    network silently never bids.
 -keep class * extends com.particles.msp.adapter.AdNetworkAdapter {
+    <init>();
+}
+
+# 1b. Bid token providers are created the same way, by BidLoaderProviderImp. Without this,
+#     the Google, Facebook and Moloco providers are stripped and those networks bid without a
+#     bid token.
+-keep class * implements com.particles.msp.adapter.BidTokenProvider {
     <init>();
 }
 
@@ -63,6 +70,16 @@
 -keep class com.particles.msp.auction.EventSamplingRate { *; }
 -keep class com.particles.msp.util.UserIdRequest { *; }
 -keep class com.particles.msp.util.UserIdResponse { *; }
+
+# 3b. The Retrofit APIs above are Kotlin suspend functions, and the SDK uses Retrofit 2.9.0,
+#     which ships no R8 rules for them. Under R8 full mode (the AGP 8 default) every call fails
+#     with "Class cannot be cast to ParameterizedType": ad config is never refreshed, the user id
+#     is never fetched, and sampled MES events are never enabled.
+-keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
 # 4. Ad config JSON (AdConfig / Placement / BidderInfo) is decoded with kotlinx.serialization.
 #    The generated serializers use string keys; keep them and their entry points.

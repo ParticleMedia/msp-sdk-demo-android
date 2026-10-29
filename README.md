@@ -73,19 +73,26 @@ Network-specific manifest entries (Google App ID, etc.) are covered per-network 
 
 If your release build enables code shrinking (`minifyEnabled true` / `isMinifyEnabled = true`), add the rules below to your app's `proguard-rules.pro`.
 
-The SDK creates ad network adapters by class name, parses ad configuration with Gson and kotlinx.serialization, and serializes events with protobuf-lite. R8 cannot see these uses, so without the rules it removes or renames the classes involved. Nothing crashes: an adapter silently never bids, ad configuration fails to parse, or events stop being reported.
+The SDK creates ad network adapters and bid token providers by class name, fetches ad configuration with Retrofit and parses it with Gson and kotlinx.serialization, and serializes events with protobuf-lite. R8 cannot see these uses, so without the rules it removes or renames the classes involved. Nothing crashes: an adapter silently never bids, ad configuration fails to parse, or events stop being reported.
 
 The rules keep only the classes and members that are reached this way. The rest of the SDK can still be shrunk and obfuscated, unlike with a blanket `-keep class com.particles.** { *; }`.
 
 ```proguard
 ## ---------------Begin: MSP SDK (narrowed from -keep class com.particles.** { *; }) ----------
 # Every rule below covers a place where MSP reaches its own classes by reflection or by name,
-# which R8 cannot see. Verified identical across MSP 3.7.0 – 4.15.2.
+# which R8 cannot see. Verified identical across MSP 3.4.1 – 4.15.2.
 
 # 1. Adapters are created by AdNetworkAdapterProviderImp via Class.forName(name).newInstance().
 #    Without this, the adapter is stripped/renamed, createInstance() returns null and that
 #    network silently never bids.
 -keep class * extends com.particles.msp.adapter.AdNetworkAdapter {
+    <init>();
+}
+
+# 1b. Bid token providers are created the same way, by BidLoaderProviderImp. Without this,
+#     the Google, Facebook and Moloco providers are stripped and those networks bid without a
+#     bid token.
+-keep class * implements com.particles.msp.adapter.BidTokenProvider {
     <init>();
 }
 
@@ -106,6 +113,16 @@ The rules keep only the classes and members that are reached this way. The rest 
 -keep class com.particles.msp.auction.EventSamplingRate { *; }
 -keep class com.particles.msp.util.UserIdRequest { *; }
 -keep class com.particles.msp.util.UserIdResponse { *; }
+
+# 3b. The Retrofit APIs above are Kotlin suspend functions, and the SDK uses Retrofit 2.9.0,
+#     which ships no R8 rules for them. Under R8 full mode (the AGP 8 default) every call fails
+#     with "Class cannot be cast to ParameterizedType": ad config is never refreshed, the user id
+#     is never fetched, and sampled MES events are never enabled.
+-keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
 # 4. Ad config JSON (AdConfig / Placement / BidderInfo) is decoded with kotlinx.serialization.
 #    The generated serializers use string keys; keep them and their entry points.
